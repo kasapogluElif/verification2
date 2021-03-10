@@ -89,7 +89,7 @@ class surveyPage extends React.Component {
       >
 
 
-        <SafeAreaView>
+        <SafeAreaView testID="app-root" accessibilityLabel="app-root">
           <ScrollView contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
             <View style={styles.titlecontainer}>
@@ -106,6 +106,7 @@ class surveyPage extends React.Component {
                 placeholder="Enter your name..."
                 onChangeText={name => this.setState({ name: name })}
                 defaultValue={this.state.name}
+                accessibilityLabel="name"
               />
             </View>
 
@@ -116,6 +117,7 @@ class surveyPage extends React.Component {
                 placeholder="Enter your surname..."
                 onChangeText={surname => this.setState({ surname: surname })}
                 defaultValue={this.state.surname}
+                accessibilityLabel="surname"
               />
             </View>
 
@@ -128,6 +130,7 @@ class surveyPage extends React.Component {
                 minimumDate = {new Date("1920-01-01")}
                 androidVariant="nativeAndroid"
                 mode="date"
+                accessibilityLabel="datepicker"
               />
             </View>
 
