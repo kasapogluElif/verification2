@@ -106,7 +106,7 @@ class surveyPage extends React.Component {
                 placeholder="Enter your name..."
                 onChangeText={name => this.setState({ name: name })}
                 defaultValue={this.state.name}
-                accessibilityLabel="name"
+                accessibilityLabel="name_input"
               />
             </View>
 
@@ -117,7 +117,7 @@ class surveyPage extends React.Component {
                 placeholder="Enter your surname..."
                 onChangeText={surname => this.setState({ surname: surname })}
                 defaultValue={this.state.surname}
-                accessibilityLabel="surname"
+                accessibilityLabel="surname_input"
               />
             </View>
 
@@ -130,7 +130,7 @@ class surveyPage extends React.Component {
                 minimumDate = {new Date("1920-01-01")}
                 androidVariant="nativeAndroid"
                 mode="date"
-                accessibilityLabel="datepicker"
+                accessibilityLabel="date_picker"
               />
             </View>
 
@@ -141,6 +141,9 @@ class surveyPage extends React.Component {
                 placeholder={{
                   label: 'Choose your city...',
                   value: null,
+                }}
+                pickerProps={{
+                  accessibilityLabel: "city_picker",
                 }}
                 items={[
                   { label: 'Adana', value: 'Adana' },
@@ -237,6 +240,7 @@ class surveyPage extends React.Component {
                   label: 'Choose your gender...',
                   value: null,
                 }}
+                accessibilityLabel="gender_picker"
                 items={[
                   { label: 'Female', value: 'female' },
                   { label: 'Male', value: 'male' },
@@ -253,6 +257,9 @@ class surveyPage extends React.Component {
                 placeholder={{
                   label: 'Choose your vaccine type...',
                   value: null,
+                }}
+                pickerProps={{
+                  accessibilityLabel: "vaccine_picker",
                 }}
                 items={[
                   { label: 'Pfizer–BioNTech', value: 'Pfizer–BioNTech' },
@@ -280,6 +287,7 @@ class surveyPage extends React.Component {
                 onChangeText={sideEffect => this.setState({ sideEffect: sideEffect })}
                 defaultValue={this.state.sideEffect}
                 blurOnSubmit={true}
+                accessibilityLabel="effect_input"
               />
             </View>
             <View style={{ height: 30 }}></View>
@@ -288,6 +296,7 @@ class surveyPage extends React.Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => this.sendButton()}
+                accessibilityLabel="send_button"
               >
                 <Text style={{ color: "#ffffff", fontFamily:'Cochin',fontSize:25,fontWeight:'bold'}}>Send</Text>
               </TouchableOpacity>
