@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import DatePicker from 'react-native-date-picker';
-import RNPickerSelect from 'react-native-picker-select';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import moment from 'moment';
+import { SegmentedControls } from 'react-native-radio-buttons'
 
 import {
   SafeAreaView,
@@ -18,64 +16,118 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-
 } from 'react-native';
 
-
+const genderbuttons = ['Female', 'Male', 'Other']
 class surveyPage extends React.Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       surname: '',
-      date: new Date(),
+      date: '',
       gender: null,
-      city: null,
+      city: '',
       vaccineType: null,
       sideEffect: '',
       buttonShow: false,
+      invalidName: false,
+      invalidSurname: false,
+      invalidDate: false,
+      invalidCity: false,
     };
   }
 
 
   check = () => {
-    console.log(this.state)
-    if(this.state.name !== '' &&
-      this.state.surname !== ''  &&
-      this.state.date.getFullYear() !== 2021 &&
+
+    if (this.state.name !== '' &&
+      this.state.invalidName === false &&
+      this.state.surname !== '' &&
+      this.state.invalidSurname === false &&
+      this.state.date !== '' &&
+      this.state.invalidDate === false &&
       this.state.gender !== null &&
-      this.state.city !== null &&
+      this.state.city !== '' &&
+      this.state.invalidCity === false &&
       this.state.vaccineType !== null &&
-      this.state.sideEffect !== ''){
-        this.setState({ buttonShow: true });
-      }
-      else{
-        this.setState({ buttonShow: false });
-      }
+      this.state.sideEffect !== '') {
+      this.setState({ buttonShow: true });
+
+    }
+    else {
+      this.setState({ buttonShow: false });
+    }
   };
 
   sendButton = () => {
-    this.props.navigation.navigate('Success Page',{name : this.state.name,
-                                                  surname: this.state.surname,
-                                                  date: this.state.date.getDate() + '/' + (this.state.date.getMonth()+1) +'/'+this.state.date.getFullYear(),
-                                                  gender: this.state.gender,
-                                                  city: this.state.city,
-                                                  vaccinetype: this.state.vaccineType,
-                                                  sideeffect: this.state.sideEffect})
+    this.props.navigation.navigate('Success Page', {
+      name: this.state.name,
+      surname: this.state.surname,
+      date: this.state.date,
+      gender: this.state.gender,
+      city: this.state.city,
+      vaccinetype: this.state.vaccineType,
+      sideeffect: this.state.sideEffect
+    })
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.name !== this.state.name ||
+      prevState.invalidName !== this.state.invalidName ||
       prevState.surname !== this.state.surname ||
+      prevState.invalidSurname !== this.state.invalidSurname ||
       prevState.date !== this.state.date ||
+      prevState.invalidDate!== this.state.invalidDate ||
       prevState.gender !== this.state.gender ||
       prevState.city !== this.state.city ||
+      prevState.invalidCity !== this.state.invalidCity ||
       prevState.vaccineType !== this.state.vaccineType ||
       prevState.sideEffect !== this.state.sideEffect) {
       this.check();
-      console.log(this.state.date.getDate())
+      //console.log(this.state.date.getDate())
     }
-  
+
+  }
+  endEditingName = (e) => {
+    this.setState({ invalidName: false })
+    let nameregex = /^[a-zA-ZğüşöçİĞÜŞÖÇ][a-zA-ZğüşöçİĞÜŞÖÇ ]*$/;
+    if (!nameregex.test(this.state.name)) {
+      this.setState({ invalidName: true });
+    }
+  }
+  endEditingSurname = (e) => {
+    this.setState({ invalidSurname: false })
+    let surnameregex = /^[a-zA-ZğüşöçİĞÜŞÖÇ][a-zA-ZğüşöçİĞÜŞÖÇ ]*$/;
+    if (!surnameregex.test(this.state.surname)) {
+      this.setState({ invalidSurname: true });
+    }
+  }
+  endEditingDate = (e) => {
+    this.setState({ invalidDate: false });
+    if (!moment(this.state.date, ["DD-MM-YYYY", "D-M-YYYY"], true).isValid() ||
+      moment(this.state.date, ["DD-MM-YYYY", "D-M-YYYY"], true).isAfter() ||
+      moment(this.state.date, ["DD-MM-YYYY", "D-M-YYYY"], true).isBefore('1801-01-01')
+    ) {
+      this.setState({ invalidDate: true });
+    }
+  }
+  endEditingCity = (e) => {
+    this.setState({ invalidCity: false });
+    const cities = ["İSTANBUL", "ANKARA", "İZMİR", "ADANA", "ADIYAMAN", "AFYONKARAHİSAR", "AĞRI", "AKSARAY", "AMASYA",
+      "ANTALYA", "ARDAHAN", "ARTVİN", "AYDIN", "BALIKESİR", "BARTIN", "BATMAN", "BAYBURT", "BİLECİK", "BİNGÖL",
+      "BİTLİS", "BOLU", "BURDUR", "BURSA", "ÇANAKKALE", "ÇANKIRI", "ÇORUM", "DENİZLİ", "DİYARBAKIR", "DÜZCE", "EDİRNE",
+      "ELAZIĞ", "ERZİNCAN", "ERZURUM", "ESKİŞEHİR", "GAZİANTEP", "GİRESUN", "GÜMÜŞHANE", "HAKKARİ", "HATAY", "IĞDIR",
+      "ISPARTA", "KAHRAMANMARAŞ", "KARABÜK", "KARAMAN", "KARS", "KASTAMONU", "KAYSERİ", "KIRIKKALE", "KIRKLARELİ",
+      "KIRŞEHİR", "KİLİS", "KOCAELİ", "KONYA", "KÜTAHYA", "MALATYA", "MANİSA", "MARDİN", "MERSİN", "MUĞLA", "MUŞ",
+      "NEVŞEHİR", "NİĞDE", "ORDU", "OSMANİYE", "RİZE", "SAKARYA", "SAMSUN", "SİİRT", "SİNOP", "SİVAS", "ŞIRNAK",
+      "TEKİRDAĞ", "TOKAT", "TRABZON", "TUNCELİ", "ŞANLIURFA", "UŞAK", "VAN", "YALOVA", "YOZGAT", "ZONGULDAK"]
+    var city = this.state.city.toLocaleUpperCase('tr-TR');
+    if (!cities.includes(city)) {
+      this.setState({ invalidCity: true });
+    }
   }
 
 
@@ -105,8 +157,14 @@ class surveyPage extends React.Component {
                 style={styles.textinput}
                 placeholder="Enter your name..."
                 onChangeText={name => this.setState({ name: name })}
+                onEndEditing={() => this.endEditingName()}
                 defaultValue={this.state.name}
               />
+
+              {this.state.invalidName ? (
+                <View style={{ height: 40 }}><Text style={styles.info2}> Invalid Name! {"\n"} Your name must contain only letters and/or spaces</Text></View>
+
+              ) : (<View style={{ height: 10 }}></View>)}
             </View>
 
             <View style={styles.questionContainer}>
@@ -115,156 +173,73 @@ class surveyPage extends React.Component {
                 style={styles.textinput}
                 placeholder="Enter your surname..."
                 onChangeText={surname => this.setState({ surname: surname })}
+                onEndEditing={() => this.endEditingSurname()}
                 defaultValue={this.state.surname}
               />
+
+              {this.state.invalidSurname ? (
+                <View style={{ height: 40 }}><Text style={styles.info2}> Invalid Surname! {"\n"} Your surname must contain only letters and/or spaces</Text></View>
+
+              ) : (<View style={{ height: 10 }}></View>)}
             </View>
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>Birth Date</Text>
-              <DatePicker
-                date={this.state.date}
-                onDateChange={date => this.setState({ date: date })}
-                maximumDate = {new Date("2020-12-31")}
-                minimumDate = {new Date("1920-01-01")}
-                androidVariant="nativeAndroid"
-                mode="date"
+              <TextInput
+                style={styles.textinput}
+                placeholder="dd-mm-yyyy"
+                onChangeText={date => this.setState({ date: date })}
+                onEndEditing={() => this.endEditingDate()}
+                defaultValue={this.state.date}
               />
+              {this.state.invalidDate ? (
+                <View style={{ height: 40 }}><Text style={styles.info2}> Invalid Date!</Text></View>
+
+              ) : (<View style={{ height: 10 }}></View>)}
+
             </View>
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>City</Text>
-              <RNPickerSelect
-                onValueChange={(value) => this.setState({ city: value })}
-                placeholder={{
-                  label: 'Choose your city...',
-                  value: null,
-                }}
-                items={[
-                  { label: 'Adana', value: 'Adana' },
-                  { label: 'Adıyaman', value: 'Adıyaman' },
-                  { label: 'Afyonkarahisar', value: 'Afyonkarahisar' },
-                  { label: 'Ağrı', value: 'Ağrı' },
-                  { label: 'Aksaray', value: 'Aksaray' },
-                  { label: 'Amasya', value: 'Amasya' },
-                  { label: 'Ankara', value: 'Ankara' },
-                  { label: 'Antalya', value: 'Antalya' },
-                  { label: 'Ardahan', value: 'Ardahan' },
-                  { label: 'Artvin', value: 'Artvin' },
-                  { label: 'Aydın', value: 'Aydın' },
-                  { label: 'Balıkesir', value: 'Balıkesir'},
-                  { label: 'Bartın', value: 'Bartın' },
-                  { label: 'Batman', value: 'Batman' },
-                  { label: 'Bayburt', value: 'Bayburt' },
-                  { label: 'Bilecik', value: 'Bilecik' },
-                  { label: 'Bingöl', value: 'Bingöl' },
-                  { label: 'Bitlis', value: 'Bitlis' },
-                  { label: 'Bolu', value: 'Bolu' },
-                  { label: 'Burdur', value: 'Burdur' },
-                  { label: 'Bursa', value: 'Bursa' },
-                  { label: 'Çanakkale', value: 'Çanakkale' },
-                  { label: 'Çankırı', value: 'Çankırı' },
-                  { label: 'Çorum', value: 'Çorum' },
-                  { label: 'Denizli', value: 'Denizli' },
-                  { label: 'Diyarbakır', value: 'Diyarbakır' },
-                  { label: 'Düzce', value: 'Düzce' },
-                  { label: 'Edirne', value: 'Edirne' },
-                  { label: 'Elazığ', value: 'Elazığ' },
-                  { label: 'Erzincan', value: 'Erzincan' },
-                  { label: 'Erzurum', value: 'Erzurum' },
-                  { label: 'Eskişehir', value: 'Eskişehir' },
-                  { label: 'Gaziantep', value: 'Gaziantep' },
-                  { label: 'Giresun', value: 'Giresun' },
-                  { label: 'Gümüşhane', value: 'Gümüşhane' },
-                  { label: 'Hakkâri', value: 'Hakkâri' },
-                  { label: 'Hatay', value: 'Hatay' },
-                  { label: 'Iğdır', value: 'Iğdır' },
-                  { label: 'Isparta', value: 'Isparta' },
-                  { label: 'İstanbul', value: 'İstanbul' },
-                  { label: 'İzmir', value: 'İzmir' },
-                  { label: 'Kahramanmaraş', value: 'Kahramanmaraş' },
-                  { label: ' Karabük', value: ' Karabük' },
-                  { label: 'Karaman', value: 'Karaman' },
-                  { label: 'Kars', value: 'Kars' },
-                  { label: 'Kastamonu', value: 'Kastamonu' },
-                  { label: 'Kayseri', value: 'Kayseri' },
-                  { label: 'Kilis', value: 'Kilis' },
-                  { label: 'Kırıkkale', value: 'Kırıkkale' },
-                  { label: 'Kırklareli', value: 'Kırklareli' },
-                  { label: 'Kırşehir', value: 'Kırşehir' },
-                  { label: 'Kocaeli', value: 'Kocaeli' },
-                  { label: 'Konya', value: 'Konya' },
-                  { label: 'Kütahya', value: 'Kütahya' },
-                  { label: 'Malatya', value: 'Malatya' },
-                  { label: 'Manisa', value: 'Manisa' },
-                  { label: 'Mardin', value: 'Mardin' },
-                  { label: 'Mersin', value: 'Mersin' },
-                  { label: 'Muğla', value: 'Muğla' },
-                  { label: 'Muş', value: 'Muş' },
-                  { label: ' Nevşehir', value: ' Nevşehir' },
-                  { label: 'Niğde', value: 'Niğde' },
-                  { label: 'Ordu', value: 'Ordu' },
-                  { label: 'Osmaniye', value: 'Osmaniye' },
-                  { label: 'Rize', value: 'Rize' },
-                  { label: 'Sakarya', value: 'Sakarya' },
-                  { label: 'Samsun', value: 'Samsun' },
-                  { label: 'Şanlıurfa', value: 'Şanlıurfa' },
-                  { label: 'Siirt', value: 'Siirt' },
-                  { label: 'Sinop', value: 'Sinop' },
-                  { label: 'Sivas', value: 'Sivas' },
-                  { label: 'Şırnak', value: 'Şırnak' },
-                  { label: 'Tekirdağ', value: 'Tekirdağ' },
-                  { label: 'Tokat', value: 'Tokat' },
-                  { label: 'Trabzon', value: 'Trabzon' },
-                  { label: 'Tunceli', value: 'Tunceli' },
-                  { label: 'Uşak', value: 'Uşak' },
-                  { label: 'Van', value: 'Van' },
-                  { label: 'Yalova', value: 'Yalova' },
-                  { label: 'Yozgat', value: 'Yozgat' },
-                  { label: 'Zonguldak', value: 'Zonguldak' }
-                ]}
+              <TextInput
+                style={styles.textinput}
+                placeholder="Enter your city..."
+                onChangeText={city => this.setState({ city: city })}
+                onEndEditing={() => this.endEditingCity()}
+                defaultValue={this.state.city}
               />
-
+              {this.state.invalidCity ? (
+                <View style={{ height: 40 }}><Text style={styles.info2}> Invalid City!</Text></View>
+              ) : (<View style={{ height: 10 }}></View>)}
             </View>
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>Gender</Text>
-              <RNPickerSelect
-                onValueChange={(value) => this.setState({ gender: value })}
-                placeholder={{
-                  label: 'Choose your gender...',
-                  value: null,
-                }}
-                items={[
-                  { label: 'Female', value: 'female' },
-                  { label: 'Male', value: 'male' },
-                  { label: 'Other', value: 'other' },
-                ]}
+              <SegmentedControls
+                options={['Female', 'Male', 'Other']}
+                onSelection={selectedOption => this.setState({ gender: selectedOption })}
+                selectedOption={this.state.gender}
+                tint={'#018786'}
+                selectedTint={'white'}
+                backTint={'#EDEDED'}
               />
             </View>
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>Vaccine type you applied</Text>
-              <RNPickerSelect
-                onValueChange={(value) => this.setState({ vaccineType: value })}
-                style={styles.textinput}
-                placeholder={{
-                  label: 'Choose your vaccine type...',
-                  value: null,
-                }}
-                items={[
-                  { label: 'Pfizer–BioNTech', value: 'Pfizer–BioNTech' },
-                  { label: 'Sputnik V ', value: 'Sputnik V ' },
-                  { label: 'Oxford–AstraZeneca', value: 'Oxford–AstraZeneca' },
-                  { label: 'BBIBP-CorV', value: 'BBIBP-CorV' },
-                  { label: 'CoronaVac', value: 'CoronaVac' },
-                  { label: 'Moderna', value: 'Moderna' },
-                  { label: 'Johnson & Johnson', value: 'Johnson & Johnson' },
-                  { label: 'Ad5-nCoV', value: 'Ad5-nCoV' },
-                  { label: 'EpiVacCorona', value: 'EpiVacCorona' },
-                  { label: 'BBV152', value: 'BBV152' },
-                  { label: 'CoviVac', value: 'CoviVac' },
-                ]}
-              />
+              <View >
+                <SegmentedControls
+                  options={['Pfizer–BioNTech', 'Sputnik V ', 'Oxford–AstraZeneca',
+                    'BBIBP-CorV', 'CoronaVac', 'Moderna', 'Johnson & Johnson',
+                    'Ad5-nCoV', 'EpiVacCorona', 'BBV152', 'CoviVac']}
+                  onSelection={selectedOption => this.setState({ vaccineType: selectedOption })}
+                  selectedOption={this.state.vaccineType}
+                  tint={'#018786'}
+                  direction={'column'}
+                  selectedTint={'white'}
+                  backTint={'#EDEDED'}
+                />
+              </View>
             </View>
 
             <View style={styles.questionContainer}>
@@ -279,27 +254,22 @@ class surveyPage extends React.Component {
                 blurOnSubmit={true}
               />
             </View>
+
             <View style={{ height: 30 }}></View>
+
 
             {this.state.buttonShow ? (
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => this.sendButton()}
               >
-                <Text style={{ color: "#ffffff", fontFamily:'Cochin',fontSize:25,fontWeight:'bold'}}>Send</Text>
+                <Text style={{ color: "#ffffff", fontFamily: 'Cochin', fontSize: 25, fontWeight: 'bold' }}>Send</Text>
               </TouchableOpacity>
 
             ) : (<View style={{ height: 50 }}><Text style={styles.info}>*TO ACTIVATE SEND BUTTON,{"\n"}ALL AREAS MUST BE FILLED </Text></View>)}
 
 
-
-
             <View style={{ height: 100 }}></View>
-
-
-
-
-
 
           </ScrollView>
         </SafeAreaView>
@@ -348,6 +318,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: "#FF0000",
     textAlign: 'center',
+    fontFamily: 'Cochin',
+  },
+  info2: {
+    fontSize: 14,
+    color: "#FF0000",
     fontFamily: 'Cochin',
   },
 
