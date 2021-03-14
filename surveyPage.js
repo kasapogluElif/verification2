@@ -141,7 +141,7 @@ class surveyPage extends React.Component {
       >
 
 
-        <SafeAreaView>
+        <SafeAreaView testID="app-root" accessibilityLabel="app-root">
           <ScrollView contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
             <View style={styles.titlecontainer}>
@@ -159,6 +159,7 @@ class surveyPage extends React.Component {
                 onChangeText={name => this.setState({ name: name })}
                 onEndEditing={() => this.endEditingName()}
                 defaultValue={this.state.name}
+                accessibilityLabel="name_input"
               />
 
               {this.state.invalidName ? (
@@ -175,6 +176,7 @@ class surveyPage extends React.Component {
                 onChangeText={surname => this.setState({ surname: surname })}
                 onEndEditing={() => this.endEditingSurname()}
                 defaultValue={this.state.surname}
+                accessibilityLabel="surname_input"
               />
 
               {this.state.invalidSurname ? (
@@ -185,11 +187,13 @@ class surveyPage extends React.Component {
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>Birth Date</Text>
+
               <TextInput
                 style={styles.textinput}
                 placeholder="dd-mm-yyyy"
                 onChangeText={date => this.setState({ date: date })}
                 onEndEditing={() => this.endEditingDate()}
+                accessibilityLabel="date_picker"
                 defaultValue={this.state.date}
               />
               {this.state.invalidDate ? (
@@ -201,8 +205,10 @@ class surveyPage extends React.Component {
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>City</Text>
+
               <TextInput
                 style={styles.textinput}
+                accessibilityLabel= "city_picker"
                 placeholder="Enter your city..."
                 onChangeText={city => this.setState({ city: city })}
                 onEndEditing={() => this.endEditingCity()}
@@ -215,18 +221,21 @@ class surveyPage extends React.Component {
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>Gender</Text>
+
               <SegmentedControls
                 options={['Female', 'Male', 'Other']}
                 onSelection={selectedOption => this.setState({ gender: selectedOption })}
                 selectedOption={this.state.gender}
+                accessibilityLabel="gender_picker"
                 tint={'#018786'}
                 selectedTint={'white'}
                 backTint={'#EDEDED'}
-              />
+                />
             </View>
 
             <View style={styles.questionContainer}>
               <Text style={styles.question}>Vaccine type you applied</Text>
+
               <View >
                 <SegmentedControls
                   options={['Pfizer–BioNTech', 'Sputnik V ', 'Oxford–AstraZeneca',
@@ -234,12 +243,14 @@ class surveyPage extends React.Component {
                     'Ad5-nCoV', 'EpiVacCorona', 'BBV152', 'CoviVac']}
                   onSelection={selectedOption => this.setState({ vaccineType: selectedOption })}
                   selectedOption={this.state.vaccineType}
+                  accessibilityLabel= "vaccine_picker"
                   tint={'#018786'}
                   direction={'column'}
                   selectedTint={'white'}
                   backTint={'#EDEDED'}
                 />
               </View>
+
             </View>
 
             <View style={styles.questionContainer}>
@@ -252,6 +263,7 @@ class surveyPage extends React.Component {
                 onChangeText={sideEffect => this.setState({ sideEffect: sideEffect })}
                 defaultValue={this.state.sideEffect}
                 blurOnSubmit={true}
+                accessibilityLabel="effect_input"
               />
             </View>
 
@@ -262,6 +274,7 @@ class surveyPage extends React.Component {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => this.sendButton()}
+                accessibilityLabel="send_button"
               >
                 <Text style={{ color: "#ffffff", fontFamily: 'Cochin', fontSize: 25, fontWeight: 'bold' }}>Send</Text>
               </TouchableOpacity>
