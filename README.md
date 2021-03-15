@@ -1,4 +1,9 @@
-<h1>Run tests</h1>
+<h2>Prerequisites for test</h2>
+<ul>
+    <li>npm install -g appium</li>
+</ul>
+
+<h2>Run tests</h1>
 <ul>
     <li>update the path to the APK file in <code>__tests__/app.test.js</code></li>
     <li><code>npm install</code></li>
