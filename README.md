@@ -1,6 +1,6 @@
 <h2>Prerequisites for test</h2>
 <ul>
-    <li>npm install -g appium</li>
+    <li><code>npm install -g appium</code></li>
 </ul>
 
 <h2>Run tests</h1>
