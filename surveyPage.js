@@ -95,11 +95,11 @@ class surveyPage extends React.Component {
 
     nameChange(name) {
         this.setState({name: name})
-
-        this.setState({invalidName: false})
         let nameregex = /^[a-zA-ZğüşöçİĞÜŞÖÇ][a-zA-ZğüşöçİĞÜŞÖÇ ]*$/;
-        if (!nameregex.test(name)) {
+        if (!nameregex.test(name) && name != "") {
             this.setState({invalidName: true});
+        } else {
+            this.setState({invalidName: false});
         }
     }
 
@@ -114,10 +114,11 @@ class surveyPage extends React.Component {
 
     surnameChange(surname) {
         this.setState({surname: surname})
-        this.setState({invalidSurname: false})
         let surnameregex = /^[a-zA-ZğüşöçİĞÜŞÖÇ][a-zA-ZğüşöçİĞÜŞÖÇ ]*$/;
-        if (!surnameregex.test(surname)) {
+        if (!surnameregex.test(surname) && surname != "") {
             this.setState({invalidSurname: true});
+        } else {
+            this.setState({invalidSurname: false});
         }
     }
 
@@ -132,19 +133,18 @@ class surveyPage extends React.Component {
     }
 
     dateChange(date) {
-        this.setState({date: date});
-        this.setState({invalidDate: false});
-
-        if (!moment(date, ["DD-MM-YYYY", "D-M-YYYY"], true).isValid() ||
+        this.setState({date: date});    
+        if ((!moment(date, ["DD-MM-YYYY", "D-M-YYYY"], true).isValid() ||
             moment(date, ["DD-MM-YYYY", "D-M-YYYY"], true).isAfter() ||
-            moment(date, ["DD-MM-YYYY", "D-M-YYYY"], true).isBefore('1801-01-01')
-        ) {
+            moment(date, ["DD-MM-YYYY", "D-M-YYYY"], true).isBefore('1801-01-01')) && date != "") 
+        {
             this.setState({invalidDate: true});
+        } else {
+            this.setState({invalidDate: false});
         }
     }
 
-    endEditingCity = (e) => {
-        this.setState({invalidCity: false});
+    onCityChange = (e) => {
         const cities = ["İSTANBUL", "ANKARA", "İZMİR", "ADANA", "ADIYAMAN", "AFYONKARAHİSAR", "AĞRI", "AKSARAY", "AMASYA",
             "ANTALYA", "ARDAHAN", "ARTVİN", "AYDIN", "BALIKESİR", "BARTIN", "BATMAN", "BAYBURT", "BİLECİK", "BİNGÖL",
             "BİTLİS", "BOLU", "BURDUR", "BURSA", "ÇANAKKALE", "ÇANKIRI", "ÇORUM", "DENİZLİ", "DİYARBAKIR", "DÜZCE", "EDİRNE",
@@ -154,8 +154,10 @@ class surveyPage extends React.Component {
             "NEVŞEHİR", "NİĞDE", "ORDU", "OSMANİYE", "RİZE", "SAKARYA", "SAMSUN", "SİİRT", "SİNOP", "SİVAS", "ŞIRNAK",
             "TEKİRDAĞ", "TOKAT", "TRABZON", "TUNCELİ", "ŞANLIURFA", "UŞAK", "VAN", "YALOVA", "YOZGAT", "ZONGULDAK"]
         var city = this.state.city.toLocaleUpperCase('tr-TR');
-        if (!cities.includes(city)) {
+        if (!cities.includes(city) && city != "") {
             this.setState({invalidCity: true});
+        } else {
+            this.setState({invalidCity: false});
         }
     }
 
@@ -175,9 +177,8 @@ class surveyPage extends React.Component {
         }
     }
 
-
     render() {
-        return (
+        return (      
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -185,7 +186,7 @@ class surveyPage extends React.Component {
             >
 
 
-                <SafeAreaView testID="app-root" accessibilityLabel="app-root" accessible={false}>
+                <SafeAreaView testID="app-root" accessibilityLabel="app-root" accessible={false} >
                     <ScrollView contentInsetAdjustmentBehavior="automatic"
                                 style={styles.scrollView}>
 
@@ -195,6 +196,7 @@ class surveyPage extends React.Component {
 
                         <View style={styles.questionContainer}>
 
+
                             <Text style={styles.question}>Name</Text>
 
 
@@ -202,7 +204,6 @@ class surveyPage extends React.Component {
                                 style={styles.textinput}
                                 placeholder="Enter your name..."
                                 onChangeText={(name) => this.nameChange(name)}
-                                onEndEditing={() => this.endEditingName()}
                                 defaultValue={this.state.name}
                                 {...this.testProps('name_input')}
                             />
@@ -232,7 +233,6 @@ class surveyPage extends React.Component {
                                 style={styles.textinput}
                                 placeholder="Enter your surname..."
                                 onChangeText={(name) => this.surnameChange(name)}
-                                onEndEditing={() => this.endEditingSurname()}
                                 defaultValue={this.state.surname}
                                 {...this.testProps('surname_input')}
                             />
@@ -254,7 +254,6 @@ class surveyPage extends React.Component {
                                 style={styles.textinput}
                                 placeholder="dd-mm-yyyy"
                                 onChangeText={(date) => this.dateChange(date)}
-                                onEndEditing={() => this.endEditingDate()}
                                 {...this.testProps('birthdate_input')}
                                 defaultValue={this.state.date}
                             />
@@ -274,8 +273,7 @@ class surveyPage extends React.Component {
                             <TextInput
                                 style={styles.textinput}
                                 placeholder="Enter your city..."
-                                onChangeText={city => this.setState({city: city})}
-                                onEndEditing={() => this.endEditingCity()}
+                                onChangeText={city => this.setState({city: city}, this.onCityChange)}
                                 defaultValue={this.state.city}
                                 {...this.testProps("cityname_input")}
                             />
@@ -379,7 +377,6 @@ class surveyPage extends React.Component {
                 </SafeAreaView>
 
             </KeyboardAvoidingView>
-
         );
 
     }

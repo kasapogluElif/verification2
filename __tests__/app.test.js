@@ -1,13 +1,13 @@
 import wd from 'wd';
 import * as util from "./helper";
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 3 * 60_000; // 2 mins
 const PORT = 4723;
 // TODO need to setup these tests for ios as well
 const config = {
     platformName: 'Android',
     deviceName: 'Android Emulator',
-    app: 'C:\\Users\\perma\\AndroidStudioProjects\\verification2\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk'
+    app: 'C:\\Users\\talha\\Documents\\ws\\verification2\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk'
 };
 // C:\Users\perma\AndroidStudioProjects\verification2\android\app\build\outputs\apk\debug\app-debug.apk
 
@@ -26,6 +26,9 @@ beforeAll(async () => {
 //     await driver.quit();
 // })
 
+beforeEach(async () => {
+    await driver.sleep(2_000);
+});
 
 test('name invalid', async () => {
     await util.fillName("rono123", driver);
@@ -124,6 +127,36 @@ test('birth date valid', async () => {
     expect(invalid_field).toBe(undefined);
 })
 
+test('city name invalid', async () => {
+    await util.fillCityName("Ankr", driver);
+    let invalid_field;
+    try {
+        invalid_field = await driver.elementByAccessibilityId("cityname_invalid");
+    } catch (e) {
+        console.log("city name invalid was not found(unexpected)");
+    }
+
+    // clear up after the test
+    await util.fillCityName("", driver, false);
+
+    expect(invalid_field).not.toBe(undefined);
+})
+
+test('city name valid', async () => {
+    await util.fillCityName("Ankara", driver);
+    let invalid_field;
+    try {
+        invalid_field = await driver.elementByAccessibilityId("cityname_invalid");
+    } catch (e) {
+        console.log("city name invalid was not found(expected)");
+    }
+
+    // clear up after the test
+    await util.fillCityName("", driver, false);
+
+    expect(invalid_field).toBe(undefined);
+})
+
 test('send info button should show up', async () => {
     await util.fillName("rono", driver);
     await util.fillSurname("lalayev", driver);
@@ -169,7 +202,6 @@ test('making sure that the side effects has a limit on size', async () => {
 
     expect(invalid_field).not.toBe(undefined);
 })
-
 
 
 /*

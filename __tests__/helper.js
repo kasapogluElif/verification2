@@ -1,4 +1,4 @@
-const WAIT_TO_LOAD = 5_000
+const WAIT_TO_LOAD = 10_000
 
 
 export async function fillName(name, driver, wait = true) {

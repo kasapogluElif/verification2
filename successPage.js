@@ -30,6 +30,12 @@ import {
 
 class surveyPage extends React.Component{
 
+  testProps(id) {
+    return {
+        testID: id,
+        accessibilityLabel: id
+    }
+  }
 
   render(){
     console.log(this.props.route.params.date)
@@ -44,15 +50,16 @@ class surveyPage extends React.Component{
             <Text style={styles.info}>Survey entry has been saved as below</Text>
 
       <View style={styles.questionContainer}>
-      
+        <Text style={styles.question}> 
+          Name: <Text style={styles.question} {...this.testProps('name_text')}>{this.props.route.params.name}</Text>
+        </Text>
 
-      <Text style={styles.question}> Name: {this.props.route.params.name}</Text>
-      <Text style={styles.question}> Surname: {this.props.route.params.surname}</Text>
-      <Text style={styles.question}> Birth Date: {this.props.route.params.date}</Text>
-      <Text style={styles.question}> City: {this.props.route.params.city}</Text>
-      <Text style={styles.question}> Gender: {this.props.route.params.gender}</Text>
-      <Text style={styles.question}> Vaccine Type: {this.props.route.params.vaccinetype}</Text>
-      <Text style={styles.question}> Side Effect(s): {this.props.route.params.sideeffect}</Text>
+        <Text style={styles.question} {...this.testProps('surname_text')}> Surname: {this.props.route.params.surname}</Text>
+        <Text style={styles.question} {...this.testProps('birthdate_text')}> Birth Date: {this.props.route.params.date}</Text>
+        <Text style={styles.question} {...this.testProps('city_text')}> City: {this.props.route.params.city}</Text>
+        <Text style={styles.question} {...this.testProps('gender_text')}> Gender: {this.props.route.params.gender}</Text>
+        <Text style={styles.question} {...this.testProps('vaccine_text')}> Vaccine Type: {this.props.route.params.vaccinetype}</Text>
+        <Text style={styles.question} {...this.testProps('sideeffects_text')}> Side Effect(s): {this.props.route.params.sideeffect}</Text>
       </View>
 
       
