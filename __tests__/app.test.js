@@ -1,25 +1,38 @@
 import wd from 'wd';
 import * as util from "./helper";
+const { join } = require("path");
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 3 * 60_000; // 2 mins
 const PORT = 4723;
 // TODO need to setup these tests for ios as well
-const config = {
+const androidConfig = {
     platformName: 'Android',
     deviceName: 'Android Emulator',
-    app: 'C:\\Users\\talha\\Documents\\ws\\verification2\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk'
+    // app: 'C:\\Users\\perma\\AndroidStudioProjects\\verification2\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk'
+    app: join(process.cwd(), "android/app/build/outputs/apk/debug/app-debug.apk")
 };
 // C:\Users\perma\AndroidStudioProjects\verification2\android\app\build\outputs\apk\debug\app-debug.apk
+// C:\Users\talha\Documents\ws\verification2\android\app\build\outputs\apk\debug\app-debug.apk
+
+
+const iosConfig = {
+    platformName: 'iOS',
+    // platformVersion: '9.3',
+    // appiumVersion: '1.5.3',
+    deviceName: 'iPhone Simulator',
+    // browserName: 'Safari',
+    // deviceOrientation: 'portrait'
+    app: join(process.cwd(), "/app-release.apk")
+}
+
+print(process.cwd())
 
 const driver = wd.promiseChainRemote('localhost', PORT);
-// driver.update_settings({"snapshotMaxDepth": 100});
 
 beforeAll(async () => {
-    await driver.init(config);
+    await driver.init(androidConfig);
     await driver.sleep(10_000);
 
-    // let contexts = await driver.contexts();
-    // await driver.context(contexts[1]);
 }) // Sometime for the app to load
 
 // afterAll(async () => {
