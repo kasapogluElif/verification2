@@ -25,19 +25,16 @@ const iosConfig = {
     app: join(process.cwd(), "/app-release.apk")
 }
 
-print(process.cwd())
+console.log(process.cwd());
 
 const driver = wd.promiseChainRemote('localhost', PORT);
 
 beforeAll(async () => {
-    await driver.init(androidConfig);
+    await driver.init(iosConfig);
     await driver.sleep(10_000);
 
 }) // Sometime for the app to load
 
-// afterAll(async () => {
-//     await driver.quit();
-// })
 
 beforeEach(async () => {
     await driver.sleep(2_000);
