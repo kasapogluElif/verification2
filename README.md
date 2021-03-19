@@ -6,6 +6,14 @@
 ```
 cd verification2
 npm install
+For ios, also these steps have to be done
+    cd ios
+    pod install 
+    return to verification2 directory (cd ..)
+    react-native unlink react-native-gesture-handler
+    react-native unlink react-native-safe-area-context
+    react-native unlink react-native-vector-icons
+    
 npm react-native start (do not close this terminal, open a new terminal and continue)
 npm react-native run-ios (for ios)
 npm react-native run-android (for android)
