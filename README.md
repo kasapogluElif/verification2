@@ -6,7 +6,7 @@
 ```
 cd verification2
 npm install
-    *For ios, also these steps have to be done
+    For ios, also these steps have to be done
     cd ios
     pod install 
     return to verification2 directory (cd ..)
